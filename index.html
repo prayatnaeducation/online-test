@@ -3,44 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ऑनलाइन मॉक टेस्ट (200 प्रश्न) - प्रयत्न एजुकेशन</title>
+    <title>ऑनलाइन मॉक टेस्ट - प्रयत्न एजुकेशन</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            background-color: #f3f4f6; 
+        }
         
-        .option-btn { transition: all 0.2s ease; border: 2px solid #e5e7eb; }
+        .option-btn { 
+            transition: all 0.2s ease; 
+            border: 2px solid #e5e7eb; 
+        }
+        
         @media (hover: hover) and (pointer: fine) {
             .option-btn:hover { border-color: #fca5a5; }
         }
-        .option-btn.selected { border-color: #b71c1c; background-color: #fef2f2; box-shadow: 0 4px 6px -1px rgba(183, 28, 28, 0.1); }
-        .option-btn.correct { border-color: #16a34a; background-color: #dcfce7; color: #166534; }
-        .option-btn.wrong { border-color: #dc2626; background-color: #fee2e2; color: #991b1b; }
+        
+        .option-btn.selected { 
+            border-color: #b71c1c; 
+            background-color: #fef2f2; 
+            box-shadow: 0 4px 6px -1px rgba(183, 28, 28, 0.1); 
+        }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #b71c1c; border-radius: 4px; }
+        
         .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Question Palette Styles */
-        .palette-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid #d1d5db; background: white; color: #4b5563; }
-        .palette-btn.answered { background: #22c55e; color: white; border-color: #16a34a; }
-        .palette-btn.active { border: 2px solid #b71c1c; transform: scale(1.1); box-shadow: 0 0 8px rgba(183,28,28,0.3); }
-        
-        /* Drawer transition */
-        .drawer-open { transform: translateX(0%); }
-        .drawer-closed { transform: translateX(100%); }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
     </style>
 </head>
 <body class="text-gray-800 h-[100dvh] w-full flex flex-col overflow-hidden">
 
-    <!-- Header z-index changed to 40 so it stays below the opened drawer -->
+    <!-- Header -->
     <header class="bg-white shadow-sm shrink-0 z-40 relative">
         <div class="max-w-7xl mx-auto px-3 md:px-4 py-3 flex justify-between items-center">
             <div class="flex-1 min-w-0 pr-2">
                 <h1 class="text-base md:text-2xl font-bold text-[#b71c1c] tracking-tight truncate">प्रयत्न एजुकेशन</h1>
-                <p class="text-[9px] md:text-xs text-gray-500 font-medium truncate">राजस्थान BSTC महा-मॉक टेस्ट</p>
+                <p class="text-[10px] md:text-xs text-gray-500 font-medium truncate">राजस्थान BSTC महा-मॉक टेस्ट</p>
             </div>
             
             <div id="header-controls" class="hidden flex items-center gap-2 md:gap-3 shrink-0">
@@ -48,9 +54,6 @@
                     <svg class="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-600 mr-1 md:mr-1.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span id="timer" class="font-bold text-[#b71c1c] tracking-wider font-mono text-xs md:text-base">03:00:00</span>
                 </div>
-                <button onclick="togglePalette()" class="md:hidden bg-gray-900 text-white p-1.5 rounded-lg active:bg-gray-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
             </div>
         </div>
     </header>
@@ -67,26 +70,27 @@
                 <p class="text-gray-500 mb-6 font-medium">आधिकारिक परीक्षा पैटर्न पर आधारित पूर्ण टेस्ट</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-left mb-8">
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">कुल प्रश्न</span><span class="font-black text-lg text-gray-800" id="display-total-q">200</span></div>
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">कुल अंक</span><span class="font-black text-lg text-gray-800" id="display-total-m">600</span></div>
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">कुल प्रश्न</span><span class="font-black text-lg text-gray-800" id="display-total-q">-</span></div>
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">कुल अंक</span><span class="font-black text-lg text-gray-800" id="display-total-m">-</span></div>
                     <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">समय</span><span class="font-black text-lg text-gray-800">180 मिनट</span></div>
                     <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex flex-col"><span class="text-gray-400 text-xs font-bold uppercase">नेगेटिव मार्किंग</span><span class="font-black text-lg text-green-600">नहीं</span></div>
                 </div>
 
                 <div class="text-left bg-blue-50 border border-blue-100 text-blue-800 text-xs p-4 rounded-xl mb-6 space-y-1">
                     <p class="font-bold mb-1">निर्देश:</p>
-                    <p>• खंड A: मानसिक योग्यता (50 प्रश्न)</p>
-                    <p>• खंड B: राजस्थान सामान्य ज्ञान (50 प्रश्न)</p>
-                    <p>• खंड C: शिक्षण अभिरुचि (50 प्रश्न)</p>
-                    <p>• खंड D: भाषा योग्यता - अंग्रेजी (20) व हिंदी (30)</p>
+                    <p>• खंड A: मानसिक योग्यता</p>
+                    <p>• खंड B: राजस्थान सामान्य ज्ञान</p>
+                    <p>• खंड C: शिक्षण अभिरुचि</p>
+                    <p>• खंड D: भाषा योग्यता - अंग्रेजी व हिंदी</p>
                 </div>
 
-                <button onclick="startTest()" class="w-full bg-[#b71c1c] hover:bg-red-800 text-white font-bold py-4 rounded-xl text-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <button onclick="startTest()" class="w-full bg-[#b71c1c] hover:bg-red-800 text-white font-bold py-4 rounded-xl text-lg transition shadow-lg transform active:scale-95">
                     टेस्ट शुरू करें
                 </button>
             </div>
         </div>
 
+        <!-- Quiz Screen -->
         <div id="quiz-screen" class="hidden w-full h-full flex overflow-hidden">
             
             <!-- Left Side: Question -->
@@ -99,10 +103,8 @@
                 <div class="flex-1 overflow-y-auto p-4 md:p-8">
                     <div class="max-w-3xl mx-auto pb-4">
                         <div class="flex justify-between items-center mb-5 md:mb-6">
-                            <span class="bg-red-50 text-[#b71c1c] border border-red-100 text-[11px] md:text-sm font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-lg tracking-wide shadow-sm" id="section-badge">मानसिक योग्यता</span>
-                            <div class="flex items-center gap-4">
-                                <button onclick="clearSelection()" class="text-xs md:text-sm font-semibold text-gray-400 hover:text-gray-700 underline underline-offset-2 active:text-gray-800">उत्तर हटाएँ</button>
-                            </div>
+                            <span class="bg-red-50 text-[#b71c1c] border border-red-100 text-[11px] md:text-sm font-bold px-2.5 py-1 md:px-3 md:py-1.5 rounded-lg tracking-wide shadow-sm" id="section-badge">खंड</span>
+                            <button onclick="clearSelection()" class="text-xs md:text-sm font-semibold text-gray-400 hover:text-gray-700 underline underline-offset-2 active:text-gray-800">उत्तर हटाएँ</button>
                         </div>
                         
                         <div class="flex items-start gap-2 md:gap-3 mb-5 md:mb-6">
@@ -118,7 +120,7 @@
                     </div>
                 </div>
 
-                <!-- Bottom Navigation (Fixed to bottom smoothly) -->
+                <!-- Bottom Navigation -->
                 <div class="w-full shrink-0 bg-white border-t border-gray-200 p-3 md:p-4 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.03)] z-20 pb-[env(safe-area-inset-bottom,12px)]">
                     <div class="max-w-3xl mx-auto flex justify-between items-center gap-2">
                         <button onclick="prevQuestion()" id="prev-btn" class="flex-1 md:flex-none px-2 py-3 md:px-5 rounded-xl border-2 border-gray-200 text-gray-600 text-xs md:text-base font-bold disabled:opacity-40 disabled:bg-gray-50 active:bg-gray-100 transition whitespace-nowrap">
@@ -133,39 +135,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Drawer Z-index fixed (z-[60]) & Width adapted (w-[85vw]) for mobile -->
-            <div id="palette-drawer" class="fixed inset-y-0 right-0 w-[85vw] max-w-[320px] md:max-w-none bg-gray-50 border-l border-gray-200 shadow-2xl z-[60] transform transition-transform duration-300 md:relative md:transform-none drawer-closed md:flex flex-col md:w-72">
-                <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center pt-[max(1rem,env(safe-area-inset-top))]">
-                    <h3 class="font-bold text-gray-800">प्रश्न पैलेट</h3>
-                    <button onclick="togglePalette()" class="md:hidden text-gray-500 hover:text-gray-800 p-2 -mr-2 rounded-full active:bg-gray-100">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-                
-                <div class="p-4 flex gap-4 text-xs font-semibold text-gray-600 bg-white border-b border-gray-200 shadow-sm shrink-0">
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-[#22c55e]"></div><span id="count-ans">0</span> हल किए</div>
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-white border border-gray-300"></div><span id="count-unans">200</span> शेष</div>
-                </div>
-
-                <div class="flex-grow overflow-y-auto p-4 pb-24">
-                    <div id="palette-grid" class="grid grid-cols-5 gap-2">
-                        <!-- Palette Buttons generated by JS -->
-                    </div>
-                    <div class="mt-8 mb-4">
-                        <button onclick="showSubmitModal()" class="w-full py-3 bg-red-100 hover:bg-red-200 text-[#b71c1c] font-bold rounded-xl border border-red-200 transition active:scale-95">
-                            टेस्ट सबमिट करें
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile Overlay for drawer (z-[55]) -->
-            <div id="palette-overlay" onclick="togglePalette()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] hidden md:hidden transition-opacity"></div>
         </div>
 
+        <!-- Result Screen -->
         <div id="result-screen" class="hidden w-full h-full flex-col items-center p-4 md:p-8 overflow-y-auto bg-gray-50 fade-in">
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 w-full max-w-2xl text-center mb-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 w-full max-w-2xl text-center mb-6 mt-4">
                 <div class="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-green-100">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                 </div>
@@ -175,7 +149,7 @@
                 <div class="bg-gray-900 rounded-2xl p-6 mb-8 text-white shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-5"></div>
                     <p class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2">आपका कुल स्कोर</p>
-                    <div class="text-6xl font-black"><span id="score-earned" class="text-yellow-400">0</span><span class="text-2xl text-gray-500"> / 600</span></div>
+                    <div class="text-6xl font-black"><span id="score-earned" class="text-yellow-400">0</span><span id="score-total-display" class="text-2xl text-gray-500"> / 0</span></div>
                 </div>
 
                 <div class="grid grid-cols-3 gap-3 mb-8">
@@ -194,24 +168,25 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="reviewAnswers()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg">
-                        उत्तरमाला देखें (Review)
+                    <button onclick="reviewAnswers()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg active:scale-95">
+                        उत्तरमाला देखें
                     </button>
-                    <button onclick="location.reload()" class="flex-1 bg-white hover:bg-gray-50 border-2 border-gray-200 text-gray-800 font-bold py-4 rounded-xl transition">
+                    <button onclick="location.reload()" class="flex-1 bg-white hover:bg-gray-50 border-2 border-gray-200 text-gray-800 font-bold py-4 rounded-xl transition active:scale-95">
                         पुनः टेस्ट दें
                     </button>
                 </div>
             </div>
         </div>
 
+        <!-- Review Screen -->
         <div id="review-screen" class="hidden w-full h-full flex-col bg-gray-50 fade-in">
             <div class="bg-white border-b border-gray-200 p-4 sticky top-0 z-10 flex justify-between items-center shadow-sm">
-                <h2 class="text-xl font-black text-gray-800">विस्तृत उत्तरमाला (Review)</h2>
-                <button onclick="location.reload()" class="bg-[#b71c1c] text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-red-800">होम पेज</button>
+                <h2 class="text-lg md:text-xl font-black text-gray-800">विस्तृत उत्तरमाला</h2>
+                <button onclick="location.reload()" class="bg-[#b71c1c] text-white text-xs md:text-sm font-bold px-4 py-2 rounded-lg hover:bg-red-800 active:scale-95 transition">होम पेज</button>
             </div>
             
             <div class="flex-grow overflow-y-auto p-4 md:p-8">
-                <div id="review-container" class="max-w-4xl mx-auto space-y-6">
+                <div id="review-container" class="max-w-4xl mx-auto space-y-6 pb-10">
                     <!-- Review questions injected via JS -->
                 </div>
             </div>
@@ -219,6 +194,7 @@
 
     </main>
 
+    <!-- Custom Modal for Submission Confirmation -->
     <div id="custom-modal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl w-full max-w-sm p-8 text-center transform scale-95 transition-transform duration-200 shadow-2xl" id="modal-content">
             <div class="w-16 h-16 bg-yellow-100 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-5">
@@ -227,69 +203,46 @@
             <h3 class="text-2xl font-black mb-2 text-gray-800">टेस्ट सबमिट करें?</h3>
             <p class="text-gray-500 mb-8 font-medium leading-relaxed" id="modal-warning">क्या आप सुनिश्चित हैं?</p>
             <div class="flex gap-3">
-                <button onclick="closeModal()" class="flex-1 px-4 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition">रद्द करें</button>
-                <button onclick="finishTest()" class="flex-1 px-4 py-3.5 bg-[#b71c1c] hover:bg-red-800 text-white font-bold rounded-xl shadow-lg transition">हाँ, सबमिट करें</button>
+                <button onclick="closeModal()" class="flex-1 px-4 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition active:scale-95">रद्द करें</button>
+                <button onclick="finishTest()" class="flex-1 px-4 py-3.5 bg-[#b71c1c] hover:bg-red-800 text-white font-bold rounded-xl shadow-lg transition active:scale-95">हाँ, सबमिट करें</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Comprehensive database of exactly 200 questions carefully mapped from the first test paper.
-        // Format: { s: Section, q: Question, o: Options Array, a: Correct Index, e: Explanation }
-        
+        // Database of Questions
         const quizData = [
-            // Mental Ability (1-50)
             {s:"मानसिक योग्यता", q:"श्रृंखला में अगली संख्या ज्ञात कीजिए: 3, 7, 15, 31, 63, ?", o:["92","115","127","131"], a:2, e:"तर्क: (संख्या × 2) + 1. जैसे 63×2+1 = 127."},
             {s:"मानसिक योग्यता", q:"यदि किसी कूट भाषा में 'APPLE' को 'EQTPI' लिखा जाता है, तो 'MANGO' को कैसे लिखा जाएगा?", o:["QERKS","PDRJS","QESKT","PEQJR"], a:0, e:"प्रत्येक अक्षर में +4 जोड़ा गया है। M(+4)=Q, A(+4)=E, आदि।"},
             {s:"मानसिक योग्यता", q:"एक तस्वीर की ओर इशारा करते हुए एक आदमी ने कहा, 'मेरा कोई भाई या बहन नहीं है, लेकिन उस आदमी का पिता मेरे पिता का पुत्र है।' वह तस्वीर किसकी थी?", o:["उसकी स्वयं की","उसके पुत्र की","उसके पिता की","उसके भतीजे की"], a:1, e:"'मेरे पिता का पुत्र' (चूँकि वह अकेला है) = वह स्वयं। अतः तस्वीर वाले आदमी का पिता वह स्वयं है, मतलब तस्वीर उसके पुत्र की है।"},
             {s:"मानसिक योग्यता", q:"एक व्यक्ति उत्तर की ओर 10 किमी चलता है, बाएँ मुड़ता है और 5 किमी चलता है, फिर बाएँ मुड़ता है और 10 किमी चलता है। वह अपने प्रारंभिक बिंदु से कितनी दूर है?", o:["5 किमी","10 किमी","15 किमी","20 किमी"], a:0, e:"वह एक आयत बनाता है। क्षैतिज दूरी 5 किमी ही बचेगी।"},
-            {s:"मानसिक योग्यता", q:"बेमेल का चयन करें (Odd one out):", o:["टमाटर","आलू","प्याज","गाजर"], a:0, e:"आलू, प्याज और गाजर जमीन के अंदर उगते हैं, जबकि टमाटर जमीन के ऊपर उगता है।"},
+            {s:"मानसिक योग्यता", q:"बेमेल का चयन करें (Odd one out):", o:["टमाटर","आलू"," प्याज","गाजर"], a:0, e:"आलू, प्याज और गाजर जमीन के अंदर उगते हैं, जबकि टमाटर जमीन के ऊपर उगता है।"},
             {s:"मानसिक योग्यता", q:"यदि A, B का भाई है; B, C की बहन है; और C, D का पिता है, तो D का A से क्या संबंध है?", o:["भाई","बहन","भतीजा/भतीजी","निर्धारित नहीं किया जा सकता"], a:3, e:"D का लिंग (Gender) स्पष्ट नहीं है, इसलिए वह भतीजा या भतीजी हो सकता है। अतः निर्धारित नहीं किया जा सकता।"},
-            {s:"मानसिक योग्यता", q:"लुप्त संख्या ज्ञात कीजिए: 1, 4, 9, 16, 25, 36, 49, ?", o:["54","56","64","81"], a:2, e:"यह प्राकृत संख्याओं के वर्गों की श्रृंखला है। $8^2 = 64$।"},
+            {s:"मानसिक योग्यता", q:"लुप्त संख्या ज्ञात कीजिए: 1, 4, 9, 16, 25, 36, 49, ?", o:["54","56","64","81"], a:2, e:"यह प्राकृत संख्याओं के वर्गों की श्रृंखला है। 8^2 = 64।"},
             {s:"मानसिक योग्यता", q:"इनमें से कौन सा शब्द अन्य से भिन्न है?", o:["बांसुरी","गिटार","सितार","वायलिन"], a:0, e:"बांसुरी फूंक (हवा) से बजाई जाती है, जबकि अन्य सभी तार (String) वाले वाद्य यंत्र हैं।"},
             {s:"मानसिक योग्यता", q:"एक निश्चित कूट भाषा में, '123' का अर्थ 'hot filtered coffee' है, '356' का अर्थ 'very hot day' है, और '589' का अर्थ 'day and night' है। 'very' के लिए कौन सा अंक प्रयुक्त हुआ है?", o:["9","5","8","6"], a:3, e:"पहले और दूसरे में 'hot' कॉमन है = 3। दूसरे और तीसरे में 'day' कॉमन है = 5। अतः दूसरे में बचा 'very' = 6।"},
-            {s:"मानसिक योग्यता", q:"12 : 144 :: 15 : ?", o:["225","215","250","205"], a:0, e:"पहली संख्या का वर्ग। $15^2 = 225$।"},
+            {s:"मानसिक योग्यता", q:"12 : 144 :: 15 : ?", o:["225","215","250","205"], a:0, e:"पहली संख्या का वर्ग। 15^2 = 225।"},
             {s:"मानसिक योग्यता", q:"अगला अक्षर ज्ञात करें: A, C, F, J, O, ?", o:["U","V","T","S"], a:0, e:"अंतर क्रमशः +2, +3, +4, +5 है। O(15) + 6 = 21(U)।"},
             {s:"मानसिक योग्यता", q:"संबंध पहचानें: पुस्तक : प्रकाशक :: फिल्म : ?", o:["लेखक","संपादक","निर्देशक","निर्माता"], a:3, e:"जिस प्रकार पुस्तक का निर्माण और वित्तीय प्रबंधन प्रकाशक करता है, उसी प्रकार फिल्म का निर्माता (Producer) करता है।"},
             {s:"मानसिक योग्यता", q:"कथन: कुछ बिल्लियाँ कुत्ते हैं। सभी कुत्ते पक्षी हैं। निष्कर्ष: I. कुछ बिल्लियाँ पक्षी हैं। II. कुछ पक्षी बिल्लियाँ हैं।", o:["केवल I अनुसरण करता है","केवल II अनुसरण करता है","I और II दोनों अनुसरण करते हैं","न तो I और न ही II अनुसरण करता है"], a:2, e:"वेन आरेख के अनुसार, बिल्लियों का कुछ हिस्सा कुत्तों में है और सभी कुत्ते पक्षी हैं, अतः निष्कर्ष I और II दोनों सही हैं।"},
             {s:"मानसिक योग्यता", q:"यदि किसी महीने की 5 तारीख सोमवार के दो दिन बाद पड़ती है, तो उस महीने की 19 तारीख से ठीक पहले कौन सा दिन होगा?", o:["मंगलवार","सोमवार","गुरुवार","बुधवार"], a:0, e:"सोमवार के 2 दिन बाद = बुधवार (5 तारीख)। 19 तारीख (5+14) भी बुधवार होगी। 19 से ठीक पहले (18 तारीख) मंगलवार होगा।"},
-            {s:"मानसिक योग्यता", q:"3:15 बजे घड़ी की सुइयों के बीच का कोण क्या होगा?", o:["0 डिग्री","7.5 डिग्री","15 डिग्री","22.5 डिग्री"], a:1, e:"सूत्र $|30H - 5.5M| = |30(3) - 5.5(15)| = |90 - 82.5| = 7.5^\circ$।"},
+            {s:"मानसिक योग्यता", q:"3:15 बजे घड़ी की सुइयों के बीच का कोण क्या होगा?", o:["0 डिग्री","7.5 डिग्री","15 डिग्री","22.5 डिग्री"], a:1, e:"सूत्र |30H - 5.5M| = |30(3) - 5.5(15)| = |90 - 82.5| = 7.5°।"},
             {s:"मानसिक योग्यता", q:"तार्किक क्रम में व्यवस्थित करें: 1. परिवीक्षा (Probation) 2. साक्षात्कार 3. चयन 4. नियुक्ति 5. विज्ञापन", o:["5, 2, 3, 4, 1","5, 3, 2, 1, 4","5, 4, 2, 3, 1","5, 2, 4, 3, 1"], a:0, e:"सही क्रम: विज्ञापन -> साक्षात्कार -> चयन -> नियुक्ति -> परिवीक्षा।"},
             {s:"मानसिक योग्यता", q:"Q, R का भाई है; P, Q की बहन है; T, S का भाई है; S, R की पुत्री है। Q के चचेरे/ममेरे भाई-बहन (cousins) कौन हैं?", o:["P और T","T और S","Q और T","इनमें से कोई नहीं"], a:3, e:"Q, R का भाई है और S व T, R के बच्चे हैं। अतः Q उनका चाचा/मामा है, चचेरा भाई नहीं। उत्तर: इनमें से कोई नहीं।"},
-            {s:"मानसिक योग्यता", q:"3, 12, 27, 48, 75, 108, ?", o:["147","162","183","192"], a:0, e:"यह $3 \times 1^2$, $3 \times 2^2$, $3 \times 3^2$... श्रृंखला है। अगला: $3 \times 7^2 = 3 \times 49 = 147$।"},
+            {s:"मानसिक योग्यता", q:"3, 12, 27, 48, 75, 108, ?", o:["147","162","183","192"], a:0, e:"यह 3×1², 3×2², 3×3²... श्रृंखला है। अगला: 3×7² = 3×49 = 147।"},
             {s:"मानसिक योग्यता", q:"विषम संख्या समूह चुनें:", o:["8 - 27","125 - 216","343 - 512","1009 - 1331"], a:3, e:"अन्य सभी लगातार संख्याओं के घन (Cubes) हैं। 1009 किसी का घन नहीं है।"},
             {s:"मानसिक योग्यता", q:"यदि WATER को YCVGT लिखा जाता है, तो HKTG को क्या लिखा जाएगा?", o:["FIRE","IRFE","Frie","ERIF"], a:0, e:"W(+2)=Y, A(+2)=C... अतः किस शब्द में +2 करने पर HKTG आएगा? F(+2)=H, I(+2)=K, R(+2)=T, E(+2)=G। उत्तर FIRE।"},
-            {s:"मानसिक योग्यता", q:"एक पार्टी में, 10 लोग एक-दूसरे से एक बार हाथ मिलाते हैं। कुल कितने हैंडशेक होंगे?", o:["100","20","45","90"], a:2, e:"सूत्र: $n(n-1)/2 = 10 \times 9 / 2 = 45$।"},
+            {s:"मानसिक योग्यता", q:"एक पार्टी में, 10 लोग एक-दूसरे से एक बार हाथ मिलाते हैं। कुल कितने हैंडशेक होंगे?", o:["100","20","45","90"], a:2, e:"सूत्र: n(n-1)/2 = 10 × 9 / 2 = 45।"},
             {s:"मानसिक योग्यता", q:"समान संबंध वाला युग्म चुनें: प्रकाश : अंधा", o:["भाषण : गूंगा","भाषा : बहरा","जीभ : ध्वनि","आवाज : कंपन"], a:0, e:"अंधा व्यक्ति प्रकाश नहीं देख सकता, उसी प्रकार गूंगा व्यक्ति भाषण (बोलना) नहीं दे सकता।"},
             {s:"मानसिक योग्यता", q:"बेमेल अक्षर समूह खोजें:", o:["BDF","JLN","QSU","VXZ"], a:2, e:"BDF(+2), JLN(+2), VXZ(+2) सभी व्यंजनों (Consonants) के समूह हैं, जबकि QSU में 'U' एक स्वर (Vowel) है।"},
             {s:"मानसिक योग्यता", q:"कथन: सभी पेन पेंसिल हैं। कोई भी पेंसिल बंदर नहीं है। निष्कर्ष: I. कोई पेन बंदर नहीं है। II. कुछ पेन बंदर हैं।", o:["केवल I अनुसरण करता है","केवल II अनुसरण करता है","दोनों अनुसरण करते हैं","कोई अनुसरण नहीं करता"], a:0, e:"चूँकि पेन पेंसिल के अंदर हैं और पेंसिल का बंदर से कोई संबंध नहीं, इसलिए कोई पेन बंदर नहीं है (I सही)।"},
-            {s:"मानसिक योग्यता", q:"यदि '+' का अर्थ '-', '-' का अर्थ '*', '*' का अर्थ '/', और '/' का अर्थ '+' है, तो 15 * 3 / 15 + 5 - 2 = ?", o:["10","20","15","25"], a:0, e:"$15 \div 3 + 15 - 5 \times 2 = 5 + 15 - 10 = 10$।"},
+            {s:"मानसिक योग्यता", q:"यदि '+' का अर्थ '-', '-' का अर्थ '*', '*' का अर्थ '/', और '/' का अर्थ '+' है, तो 15 * 3 / 15 + 5 - 2 = ?", o:["10","20","15","25"], a:0, e:"15 ÷ 3 + 15 - 5 × 2 = 5 + 15 - 10 = 10।"},
             {s:"मानसिक योग्यता", q:"निर्देश: 'RECREATION' शब्द के अक्षरों से कौन सा शब्द नहीं बनाया जा सकता है?", o:["RATION","ACTION","TORN","REFER"], a:3, e:"REFER नहीं बनाया जा सकता क्योंकि RECREATION में 'F' अक्षर नहीं है।"},
-            {s:"मानसिक योग्यता", q:"प्रश्न चिह्न के स्थान पर कौन सी संख्या आएगी? 5, 11, 24, 51, 106, ?", o:["217","221","215","211"], a:0, e:"तर्क: $\times 2 + 1, \times 2 + 2, \times 2 + 3...$। $106 \times 2 + 5 = 217$।"},
-            {s:"मानसिक योग्यता", q:"एक कक्षा में एक छात्र का स्थान ऊपर से 9वाँ और नीचे से 38वाँ है। कक्षा में कुल कितने छात्र हैं?", o:["45","46","47","48"], a:1, e:"कुल = (ऊपर + नीचे) - 1 = $9 + 38 - 1 = 46$।"},
-            {s:"मानसिक योग्यता", q:"सादृश्यता पूर्ण करें: 8 : 256 :: 10 : ?", o:["500","1000","800","900"], a:0, e:"तर्क: $x^3 / 2$। $8^3=512/2=256$। $10^3=1000/2=500$।"},
+            {s:"मानसिक योग्यता", q:"प्रश्न चिह्न के स्थान पर कौन सी संख्या आएगी? 5, 11, 24, 51, 106, ?", o:["217","221","215","211"], a:0, e:"तर्क: ×2+1, ×2+2, ×2+3...। 106 × 2 + 5 = 217।"},
+            {s:"मानसिक योग्यता", q:"एक कक्षा में एक छात्र का स्थान ऊपर से 9वाँ और नीचे से 38वाँ है। कक्षा में कुल कितने छात्र हैं?", o:["45","46","47","48"], a:1, e:"कुल = (ऊपर + नीचे) - 1 = 9 + 38 - 1 = 46।"},
+            {s:"मानसिक योग्यता", q:"सादृश्यता पूर्ण करें: 8 : 256 :: 10 : ?", o:["500","1000","800","900"], a:0, e:"तर्क: x³ / 2। 8³=512/2=256। 10³=1000/2=500।"},
             {s:"मानसिक योग्यता", q:"बेमेल छाँटिए:", o:["वर्ग (Square)","गोला (Sphere)","आयत (Rectangle)","वृत्त (Circle)"], a:1, e:"गोला (Sphere) एक 3D आकृति है, बाकी सभी 2D आकृतियाँ हैं।"},
-            {s:"मानसिक योग्यता", q:"1 जनवरी 2000 को कौन सा दिन था?", o:["शनिवार","रविवार","सोमवार","शुक्रवार"], a:0, e:"कैलेंडर गणना के अनुसार 1 जनवरी 2000 को शनिवार था।"},
-            {s:"मानसिक योग्यता", q:"सही विकल्प चुनें: C4X, F9U, I16R, ?", o:["K25P","L25P","L25O","L27P"], a:2, e:"अक्षर +3 बढ़/घट रहे हैं, और संख्याएँ वर्ग हैं ($2^2, 3^2, 4^2$)। अगला L(12), $5^2=25$, O(15) होगा। L25O।"},
-            {s:"मानसिक योग्यता", q:"यदि दक्षिण-पूर्व को उत्तर कहा जाए, उत्तर-पूर्व को पश्चिम कहा जाए, तो पश्चिम को क्या कहा जाएगा?", o:["उत्तर-पूर्व","उत्तर-पश्चिम","दक्षिण-पूर्व","दक्षिण"], a:2, e:"सभी दिशाएँ 135° वामावर्त (Anti-clockwise) घूम रही हैं। पश्चिम का 135° वामावर्त 'दक्षिण-पूर्व' होगा।"},
-            {s:"मानसिक योग्यता", q:"एक फलों की टोकरी में सेब, संतरे और आम हैं। यदि 20% सेब हैं और 30% संतरे हैं, तो आम का भाग कितना है?", o:["1/2","1/3","1/4","1/5"], a:0, e:"बचे हुए आम 50% हैं। भिन्न में $50\% = 1/2$।"},
-            {s:"मानसिक योग्यता", q:"पुरुष, पिता और डॉक्टर के बीच संबंध को कौन सा वेन आरेख सबसे अच्छा दर्शाता है?", o:["अतिव्यापी वृत्त (Overlapping)","एक के अंदर एक","एक के अंदर दो","एक वृत्त दो प्रतिच्छेदी वृत्तों को काटता हुआ"], a:3, e:"सभी पिता पुरुष हैं (एक वृत्त के अंदर दूसरा)। डॉक्टर कुछ पुरुष भी हो सकते हैं और कुछ पिता भी (तीसरा वृत्त दोनों को काटेगा)।"},
-            {s:"मानसिक योग्यता", q:"लड़कों की एक पंक्ति में, A बाएँ से 10वें और B दाएँ से 9वें स्थान पर है। यदि वे अपना स्थान आपस में बदल लें, तो A बाएँ से 15वाँ हो जाता है। पंक्ति में कितने लड़के हैं?", o:["23","27","28","31"], a:0, e:"A का नया स्थान बाएँ से 15 है, जो दाएँ से 9वाँ (B का पुराना) है। कुल = $15 + 9 - 1 = 23$।"},
-            {s:"मानसिक योग्यता", q:"लुप्त पद ज्ञात करें: BMO, EOQ, HQS, ?", o:["KSU","LTV","SOW","SOV"], a:0, e:"पहला अक्षर +3 (B, E, H, K)। दूसरा अक्षर +2 (M, O, Q, S)। तीसरा +2 (O, Q, S, U)। उत्तर KSU।"},
-            {s:"मानसिक योग्यता", q:"एक इलेक्ट्रिक ट्रेन उत्तर से दक्षिण की ओर जा रही है। हवा पूर्व से पश्चिम की ओर चल रही है। ट्रेन का धुआं किस दिशा में जाएगा?", o:["दक्षिण-पश्चिम","उत्तर-पूर्व","पश्चिम","कोई धुआं नहीं होगा"], a:3, e:"इलेक्ट्रिक ट्रेन धुआं नहीं छोड़ती है।"},
-            {s:"मानसिक योग्यता", q:"एक पासे को दो बार उछाला जाता है। यदि शीर्ष पर 2 और 5 हैं, तो 4 के विपरीत कौन सी संख्या होगी?", o:["1","3","6","निर्धारित नहीं किया जा सकता"], a:3, e:"प्रश्न में पासे की पूरी जानकारी या अन्य सतहों के अंक नहीं दिए गए हैं, अतः उत्तर निर्धारित नहीं किया जा सकता।"},
-            {s:"मानसिक योग्यता", q:"अक्षरों का विषम समूह ज्ञात करें:", o:["AEIOU","BFJNR","CGKOS","DHLPT"], a:0, e:"AEIOU सभी स्वर (Vowels) हैं, अन्य सभी में +4 का अंतर है और व्यंजन हैं।"},
-            {s:"मानसिक योग्यता", q:"'कप' का 'कॉफी' से जो संबंध है, 'कटोरा' का किससे है:", o:["डिश","सूप","चम्मच","भोजन"], a:1, e:"जिस प्रकार कप में कॉफी पी जाती है, कटोरे (Bowl) में सूप पिया जाता है।"},
-            {s:"मानसिक योग्यता", q:"यदि RED को 6720 लिखा जाता है, तो GREEN को कैसे लिखा जाएगा?", o:["1677209","1677199","16717209","9207716"], a:0, e:"अक्षरों के क्रम में +2 करके उलटा लिखा गया है। D(4+2=6), E(5+2=7), R(18+2=20) -> 6720। GREEN -> N(16), E(7), E(7), R(20), G(9) -> 1677209।"},
-            {s:"मानसिक योग्यता", q:"अंग्रेजी वर्णमाला में बाएँ से 13वें अक्षर के दाएँ 7वाँ अक्षर कौन सा होगा?", o:["S","T","U","V"], a:1, e:"बाएँ से (13 + 7) = 20वाँ अक्षर 'T' होता है।"},
-            {s:"मानसिक योग्यता", q:"एक माँ अपने बेटे से तीन गुना बड़ी है। 5 वर्ष पहले, वह 4 गुना बड़ी थी। माँ की वर्तमान आयु क्या है?", o:["40","45","50","55"], a:1, e:"माना बेटे की आयु $x$, माँ $3x$। 5 वर्ष पहले: $3x - 5 = 4(x - 5) \Rightarrow x = 15$। माँ की आयु $3 \times 15 = 45$ वर्ष।"},
-            {s:"मानसिक योग्यता", q:"यदि 2*3=13, 3*4=25, 4*5=41 है, तो 5*6=?", o:["51","61","71","81"], a:1, e:"तर्क: $a^2 + b^2$। $5^2 + 6^2 = 25 + 36 = 61$।"},
-            {s:"मानसिक योग्यता", q:"अनुक्रम पूर्ण करें: 10, 100, 200, 310, ?", o:["400","410","420","430"], a:3, e:"अंतर क्रमशः 90, 100, 110 है। अगला अंतर 120 होगा। $310 + 120 = 430$।"},
-            {s:"मानसिक योग्यता", q:"इनमें से कौन सा लीप वर्ष है?", o:["1900","2100","2000","1800"], a:2, e:"शताब्दी वर्ष लीप वर्ष तभी होता है जब वह 400 से पूर्णतः विभाज्य हो (जैसे 2000)।"},
-            {s:"मानसिक योग्यता", q:"'BSTC' शब्द का सही दर्पण प्रतिबिंब (Mirror Image) पहचानें:", o:["CTSB","उल्टे अक्षर","उलटे (Inverted) अक्षर","पार्श्व व्युत्क्रमण (Lateral inversion)"], a:3, e:"दर्पण प्रतिबिंब में पार्श्व व्युत्क्रमण (दायाँ भाग बायाँ और बायाँ भाग दायाँ) होता है।"},
-            {s:"मानसिक योग्यता", q:"दो विकर्णों वाले एक वर्ग में त्रिभुजों की संख्या गिनें:", o:["4","6","8","10"], a:2, e:"वर्ग के 2 विकर्ण खींचने पर 4 छोटे और 4 बड़े (कुल 8) त्रिभुज बनते हैं।"},
-            {s:"मानसिक योग्यता", q:"एक शिकारी से पूछा गया कि उसके बैग में कितने पक्षी हैं। उसने उत्तर दिया कि 6 को छोड़कर सभी गौरैया हैं, 6 को छोड़कर सभी कबूतर हैं, और 6 को छोड़कर सभी बत्तखें हैं। उसके पास कितने पक्षी थे?", o:["9","18","27","36"], a:0, e:"सूत्र: $n-1 = 3-1 = 2$। कुल = $6+6+6 / 2 = 18/2 = 9$ पक्षी। (3 गौरैया, 3 कबूतर, 3 बत्तख)।"},
-
+            
             {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान का 'नीला शहर' (Blue City) किस शहर को कहा जाता है?", o:["जयपुर","जोधपुर","उदयपुर","बीकानेर"], a:1, e:"जोधपुर को नीले रंग के घरों के कारण 'ब्लू सिटी' कहा जाता है।"},
             {s:"राजस्थान सामान्य ज्ञान", q:"जयपुर शहर के संस्थापक कौन थे?", o:["राणा कुंभा","सवाई जयसिंह II","राव जोधा","महाराणा प्रताप"], a:1, e:"जयपुर की स्थापना 1727 ई. में सवाई जयसिंह द्वितीय ने की थी।"},
             {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध 'दिलवाड़ा मंदिर' कहाँ स्थित हैं?", o:["माउंट आबू","पुष्कर","रणकपुर","नाथद्वारा"], a:0, e:"दिलवाड़ा जैन मंदिर माउंट आबू (सिरोही) में स्थित हैं, जो संगमरमर की नक्काशी के लिए प्रसिद्ध हैं।"},
@@ -300,149 +253,24 @@
             {s:"राजस्थान सामान्य ज्ञान", q:"'राजस्थान का गांधी' किसे कहा जाता है?", o:["जय नारायण व्यास","गोकुल भाई भट्ट","भोगीलाल पंड्या","माणिक्य लाल वर्मा"], a:1, e:"गोकुल भाई भट्ट को राजस्थान का गांधी कहा जाता है (वागड़ का गांधी भोगीलाल पंड्या)।"},
             {s:"राजस्थान सामान्य ज्ञान", q:"पूर्णतः राजस्थान में बहने वाली सबसे लंबी नदी कौन सी है?", o:["लूनी","चंबल","बनास","माही"], a:2, e:"बनास नदी पूर्ण रूप से राजस्थान में बहने वाली सबसे लंबी नदी (512 किमी) है।"},
             {s:"राजस्थान सामान्य ज्ञान", q:"'बणी-ठणी' चित्रकला किस शैली से संबंधित है?", o:["मेवाड़ शैली","किशनगढ़ शैली","मारवाड़ शैली","हाड़ौती शैली"], a:1, e:"बणी-ठणी (भारत की मोनालिसा) किशनगढ़ चित्रकला शैली से संबंधित है (रचयिता: निहालचंद)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान का एकीकरण किस वर्ष पूर्ण हुआ?", o:["1948","1950","1956","1960"], a:2, e:"1 नवंबर 1956 को 7वें चरण के साथ एकीकरण पूर्ण हुआ था।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"किस किले को 'सोनार किला' के नाम से जाना जाता है?", o:["चित्तौड़गढ़ किला","मेहरानगढ़ किला","जैसलमेर किला","कुंभलगढ़ किला"], a:2, e:"पीले पत्थरों से निर्मित जैसलमेर किले को सोनार किला (स्वर्णगिरी) कहा जाता है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"कुंभलगढ़ किले का निर्माण किसने करवाया था?", o:["राणा सांगा","राणा कुंभा","महाराणा प्रताप","राव जोधा"], a:1, e:"शिल्पी मंडन की देखरेख में राणा कुंभा ने इसका निर्माण करवाया था।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'घूमर' कहाँ का पारंपरिक नृत्य है?", o:["गुजरात","हरियाणा","पंजाब","राजस्थान"], a:3, e:"घूमर राजस्थान का राज्य नृत्य (नृत्यों का सिरमौर) है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"कौन सी नदी कर्क रेखा को दो बार पार करती है?", o:["चंबल","माही","लूनी","साबरमती"], a:1, e:"माही नदी (वागड़ की गंगा) कर्क रेखा को उल्टे 'U' आकार में दो बार काटती है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान में परमाणु ऊर्जा स्टेशन कहाँ स्थित है?", o:["सूरतगढ़","रावतभाटा","रामगढ़","बांसवाड़ा"], a:1, e:"चित्तौड़गढ़ के रावतभाटा में राजस्थान का पहला परमाणु ऊर्जा संयंत्र स्थित है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"अमृता देवी बलिदान से 'खेजड़ी' वृक्षों की रक्षा किस गाँव में की गई थी?", o:["खेजड़ली","पीपाड़","ओसियां","फलोदी"], a:0, e:"जोधपुर के खेजड़ली गाँव में 1730 ई. में 363 विश्नोइयों ने पेड़ों के लिए बलिदान दिया था।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"पिछोला झील कहाँ स्थित है?", o:["जयपुर","उदयपुर","अजमेर","अलवर"], a:1, e:"राणा लाखा के काल में एक बंजारे द्वारा उदयपुर में इसका निर्माण करवाया गया था।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"किस शासक ने अकबर की सेना के खिलाफ हल्दीघाटी का युद्ध लड़ा था?", o:["राणा सांगा","महाराणा प्रताप","उदय सिंह","अमर सिंह"], a:1, e:"1576 ई. में महाराणा प्रताप और मानसिंह (अकबर के सेनापति) के बीच यह युद्ध हुआ।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'तीज' का त्योहार मुख्य रूप से किस महीने में मनाया जाता है?", o:["चैत्र","फाल्गुन","श्रावण","कार्तिक"], a:2, e:"श्रावण शुक्ल तृतीया को छोटी तीज (हरियाली तीज) मनाई जाती है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान अपनी सीमाएँ कितने भारतीय राज्यों के साथ साझा करता है?", o:["4","5","6","7"], a:1, e:"पंजाब, हरियाणा, उत्तर प्रदेश, मध्य प्रदेश और गुजरात (कुल 5 राज्य)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"किस जिले को 'राजस्थान का मैनचेस्टर' कहा जाता है?", o:["कोटा","भीलवाड़ा","पाली","अजमेर"], a:1, e:"वस्त्र उद्योग की अधिकता के कारण भीलवाड़ा को राजस्थान का मैनचेस्टर (वस्त्र नगरी) कहा जाता है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध युद्ध स्थल 'हल्दीघाटी' किस जिले में स्थित है?", o:["उदयपुर","चित्तौड़गढ़","राजसमंद","प्रतापगढ़"], a:2, e:"हल्दीघाटी राजसमंद जिले में स्थित एक दर्रा है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध महाकाव्य 'पृथ्वीराज रासो' किसने लिखा?", o:["जयानक","चंदबरदाई","नैणसी","सूर्यमल्ल मिश्रण"], a:1, e:"पृथ्वीराज चौहान के दरबारी कवि चंदबरदाई ने इसे पिंगल भाषा में लिखा था।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान का एकमात्र हिल स्टेशन (पर्वतीय स्थल) कौन सा है?", o:["माउंट आबू","रणकपुर","कुंभलगढ़","तारागढ़"], a:0, e:"सिरोही जिले में स्थित माउंट आबू राजस्थान का सबसे ऊँचा और एकमात्र हिल स्टेशन है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"भारत में पंचायती राज व्यवस्था सबसे पहले कहाँ शुरू की गई थी?", o:["नागौर, राजस्थान","वर्धा, महाराष्ट्र","आनंद, गुजरात","मेदक, आंध्र प्रदेश"], a:0, e:"2 अक्टूबर 1959 को पं. नेहरू द्वारा नागौर के बगदरी गाँव से इसकी शुरुआत की गई।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान में जल संरक्षण की पारंपरिक संरचना क्या कहलाती है?", o:["बावड़ी","जोहड़","टांका","उपरोक्त सभी"], a:3, e:"ये सभी पश्चिमी राजस्थान में जल संरक्षण के पारंपरिक स्रोत हैं।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"भगवान कृष्ण की महान भक्त 'मीरा बाई' किस क्षेत्र से संबंधित थीं?", o:["मारवाड़","मेवाड़","हाड़ौती","ढूंढाड़"], a:1, e:"उनका जन्म मारवाड़ (कुड़की) में हुआ था, लेकिन वे मेवाड़ (चित्तौड़गढ़) के राजघराने की बहू थीं।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"कौन सा जिला 'थेवा कला' (कांच पर सोने की मीनाकारी) के लिए प्रसिद्ध है?", o:["प्रतापगढ़","बीकानेर","जयपुर","जोधपुर"], a:0, e:"प्रतापगढ़ का राजसोनी परिवार थेवा कला के लिए विश्व प्रसिद्ध है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान का राज्य वृक्ष कौन सा है?", o:["नीम","बरगद","खेजड़ी","पीपल"], a:2, e:"खेजड़ी (Prosopis Cineraria) को 1983 में राज्य वृक्ष घोषित किया गया।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध ब्रह्मा मंदिर कहाँ स्थित है?", o:["पुष्कर","अजमेर","नाथद्वारा","कोलायत"], a:0, e:"विश्व का सबसे प्रसिद्ध और एकमात्र (मुख्य) ब्रह्मा मंदिर पुष्कर (अजमेर) में है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान का राज्य पशु कौन सा है?", o:["बाघ","चिंकारा / ऊंट","तेंदुआ","काला हिरण"], a:1, e:"चिंकारा (वन्य श्रेणी) और ऊंट (पशुधन श्रेणी 2014) दोनों राज्य पशु हैं।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राज्य सरकार का संवैधानिक प्रमुख कौन होता है?", o:["मुख्यमंत्री","राज्यपाल","मुख्य न्यायाधीश","विधानसभा अध्यक्ष"], a:1, e:"राज्यपाल राज्य का संवैधानिक प्रमुख होता है, जबकि वास्तविक प्रमुख मुख्यमंत्री होता है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'राष्ट्रीय मरु उद्यान' कहाँ स्थित है?", o:["बाड़मेर और जैसलमेर","बीकानेर","जोधपुर","चूरू"], a:0, e:"यह गोडावण पक्षी के लिए प्रसिद्ध है और क्षेत्रफल में सबसे बड़ा (3162 वर्ग किमी) है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"मेवाड़ के किस शासक ने 'राजपूताना एजेंसी' का गठन किया था?", o:["महाराणा भीम सिंह","महाराणा फतेह सिंह","महाराणा भोपाल सिंह","इनमें से कोई नहीं"], a:3, e:"राजपूताना एजेंसी का गठन 1832 में ब्रिटिश सरकार द्वारा किया गया था (शासकों द्वारा नहीं)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध 'ऊंट महोत्सव' प्रतिवर्ष कहाँ आयोजित किया जाता है?", o:["जोधपुर","जैसलमेर","बीकानेर","बाड़मेर"], a:2, e:"जनवरी माह में ऊंट महोत्सव बीकानेर में मनाया जाता है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान में कुल जिलों की संख्या कितनी है (हाल ही के पुनर्गठन के अनुसार)?", o:["33","50","53","40"], a:1, e:"हाल ही के पुनर्गठन के बाद जिलों की संख्या 50 हो गई है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'रणकपुर जैन मंदिर' किसके लिए प्रसिद्ध है?", o:["1444 खंभे","सोने की चित्रकारी","ब्लू पॉटरी","कांच का काम"], a:0, e:"मथाई नदी के किनारे स्थित इन मंदिरों में 1444 खंभे हैं (खंभों का अजायबघर)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"लूनी नदी कहाँ गिरती है?", o:["बंगाल की खाड़ी","अरब सागर","कच्छ का रण","खंभात की खाड़ी"], a:2, e:"लूनी नदी अजमेर के नाग पहाड़ से निकलकर गुजरात के कच्छ के रण में विलुप्त हो जाती है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान के प्रथम मुख्यमंत्री कौन थे?", o:["मोहन लाल सुखाड़िया","हीरालाल शास्त्री","टीकाराम पालीवाल","जय नारायण व्यास"], a:1, e:"हीरालाल शास्त्री प्रथम मनोनीत मुख्यमंत्री थे (प्रथम निर्वाचित टीकाराम पालीवाल थे)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'फड़' चित्रकला किस क्षेत्र में प्रसिद्ध है?", o:["शाहपुरा (भीलवाड़ा)","किशनगढ़","नाथद्वारा","बूंदी"], a:0, e:"शाहपुरा का जोशी परिवार फड़ चित्रण (कपड़े पर लोक देवताओं की कथा) के लिए प्रसिद्ध है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"राजस्थान में किस खनिज का सर्वाधिक उत्पादन होता है?", o:["कोयला","लौह अयस्क","वोलास्टोनाइट और जस्ता","सोना"], a:2, e:"सीसा-जस्ता, वोलास्टोनाइट और जास्पर में राजस्थान का एकाधिकार है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'बिश्नोई' संप्रदाय की स्थापना किसने की थी?", o:["जाम्भोजी","जसनाथजी","दादू दयाल","राम चरण"], a:0, e:"संत जाम्भोजी ने 29 (बीस+नौ) नियमों के साथ इस संप्रदाय की स्थापना की।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"प्रसिद्ध 'चौरासी खंभों की छतरी' कहाँ स्थित है?", o:["बूंदी","कोटा","झालावाड़","अलवर"], a:0, e:"यह छतरी बूंदी में देवपुरा गाँव के पास स्थित है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'विजय स्तंभ' किस किले में स्थित है?", o:["रणथंभौर","चित्तौड़गढ़","कुंभलगढ़","आमेर"], a:1, e:"मालवा विजय (सारंगपुर युद्ध) के उपलक्ष्य में राणा कुंभा ने चित्तौड़गढ़ में इसका निर्माण करवाया।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'चूरू' के किले का निर्माण किसने करवाया था?", o:["ठाकुर कुशाल सिंह","राव बीका","मालदेव","इनमें से कोई नहीं"], a:0, e:"ठाकुर कुशाल सिंह ने 1739 ई. में इसका निर्माण करवाया था (यह चांदी के गोले दागने के लिए प्रसिद्ध है)।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"निम्नलिखित में से कौन सी खारे पानी की झील है?", o:["पुष्कर","आना सागर","सांभर","फतेह सागर"], a:2, e:"सांभर झील भारत की दूसरी सबसे बड़ी और राजस्थान की सबसे बड़ी खारे पानी की झील है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"उत्तर पश्चिम रेलवे का मुख्यालय कहाँ है?", o:["जोधपुर","अजमेर","जयपुर","बीकानेर"], a:2, e:"उत्तर पश्चिम रेलवे (NWR) का मुख्यालय जयपुर में स्थित है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'सरिस्का टाइगर रिजर्व' किस जिले में स्थित है?", o:["अलवर","भरतपुर","दौसा","सवाई माधोपुर"], a:0, e:"सरिस्का अलवर में स्थित है और हरे कबूतरों के लिए भी प्रसिद्ध है।"},
-            {s:"राजस्थान सामान्य ज्ञान", q:"'वंश भास्कर' की रचना किसने की?", o:["करणी दान","सूर्यमल्ल मिश्रण","श्यामलदास","नैणसी"], a:1, e:"बूंदी के राज्य कवि सूर्यमल्ल मिश्रण (राज्य कवि) ने 'वंश भास्कर' की रचना की।"},
-
+            
             {s:"शिक्षण अभिरुचि", q:"एक शिक्षक का प्राथमिक कार्य क्या है?", o:["पाठ्यक्रम पूरा करना","छात्रों के सीखने का मार्गदर्शन करना","सख्त अनुशासन बनाए रखना","दैनिक परीक्षा लेना"], a:1, e:"आधुनिक शिक्षा में शिक्षक एक 'मार्गदर्शक' (Guide) और 'सुविधाप्रदाता' (Facilitator) होता है।"},
             {s:"शिक्षण अभिरुचि", q:"यदि कोई छात्र कक्षा में बार-बार प्रश्न पूछता है, तो शिक्षक को चाहिए:", o:["उसे सजा दें","उसकी जिज्ञासा को प्रोत्साहित करें","उसे अनदेखा करें","कक्षा के बाद ही पूछने को कहें"], a:1, e:"प्रश्न पूछना सक्रिय अधिगम (Active learning) का संकेत है, इसे हमेशा प्रोत्साहित करना चाहिए।"},
             {s:"शिक्षण अभिरुचि", q:"सार्थक सीखना (Meaningful learning) तब होता है जब:", o:["छात्र अच्छी तरह रट लेते हैं","यह वास्तविक जीवन से जुड़ा हो","शिक्षक सख्त हो","परीक्षाएं आसान हों"], a:1, e:"ज्ञान को बाहरी दुनिया (Real life) से जोड़ना NCF-2005 का मुख्य सिद्धांत है।"},
             {s:"शिक्षण अभिरुचि", q:"निम्नलिखित में से कौन सी आंतरिक प्रेरणा (Intrinsic motivation) है?", o:["शिक्षक से प्रशंसा","पुरस्कार प्राप्त करना","सीखने का आनंद","असफलता का डर"], a:2, e:"जब कार्य स्वयं आनंददायक हो (आनंद के लिए सीखना), तो वह आंतरिक प्रेरणा है। बाकी सभी बाहरी हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"एक अच्छा कक्षा का वातावरण वह है जहाँ:", o:["पूरी तरह सन्नाटा रहता है","छात्र डरे रहते हैं","सक्रिय बातचीत (Interaction) होती है","शिक्षक नोट्स लिखवाता है"], a:2, e:"प्रभावी कक्षा वह ক্ষমতায় द्वि-मार्गीय (Two-way) संवाद होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"एक सफल शिक्षक का सबसे महत्वपूर्ण गुण है:", o:["अच्छा दिखना","विषय पर पकड़ और अभिव्यक्ति","सख्ती","प्रिंसिपल से मित्रता"], a:1, e:"विषय का गहरा ज्ञान और उसे सरलता से छात्रों तक पहुँचाने की क्षमता (Expression) सबसे जरूरी है।"},
-            {s:"शिक्षण अभिरुचि", q:"यदि कुछ छात्र पढ़ाई में कमजोर हैं, तो आप:", o:["उन्हें डांटेंगे","उपचारात्मक शिक्षण (Remedial teaching) देंगे","उन्हें उनके हाल पर छोड़ देंगे","माता-पिता से शिकायत करेंगे"], a:1, e:"कमजोरी का कारण जानकर उसका निदान करना उपचारात्मक शिक्षण कहलाता है।"},
-            {s:"शिक्षण अभिरुचि", q:"स्कूलों में शारीरिक दंड (Corporal punishment):", o:["प्रोत्साहित किया जाना चाहिए","पूरी तरह से प्रतिबंधित होना चाहिए","कभी-कभी इस्तेमाल किया जाना चाहिए","केवल लड़कों के लिए अनुमत होना चाहिए"], a:1, e:"RTE अधिनियम 2009 के अनुसार स्कूलों में शारीरिक और मानसिक प्रताड़ना पूर्णतः प्रतिबंधित है।"},
-            {s:"शिक्षण अभिरुचि", q:"एक आधुनिक कक्षा में शिक्षक की भूमिका क्या है?", o:["तानाशाह","सुविधाप्रदाता (Facilitator)","निष्क्रिय पर्यवेक्षक","प्रशासक"], a:1, e:"शिक्षक का काम ज्ञान थोपना नहीं, बल्कि ज्ञान निर्माण के अवसर (सुविधाएँ) देना है।"},
-            {s:"शिक्षण अभिरुचि", q:"होमवर्क दिया जाना चाहिए:", o:["सजा के रूप में","छात्रों को घर पर व्यस्त रखने के लिए","अभ्यास और सुदृढीकरण के लिए","माता-पिता को प्रभावित करने के लिए"], a:2, e:"कक्षा में सीखे गए ज्ञान को स्थायी बनाने (Reinforcement) के लिए गृहकार्य दिया जाता है।"},
-            {s:"शिक्षण अभिरुचि", q:"श्रवण बाधित (hearing impairment) बच्चे को कहाँ बैठाना चाहिए:", o:["पीछे","आगे की पंक्ति में","कक्षा के बाहर","कहीं भी"], a:1, e:"कम सुनने वाले बच्चे को आगे बैठाना चाहिए ताकि वह शिक्षक के होंठ (Lip reading) और हाव-भाव देख सके।"},
-            {s:"शिक्षण अभिरुचि", q:"दृश्य-श्रव्य सामग्री (Audio-visual aids) मदद करती है:", o:["समय बर्बाद करने में","सीखने को प्रभावी और स्थायी बनाने में","छात्रों के मनोरंजन में","शिक्षक का काम कम करने में"], a:1, e:"TLM (Teaching Learning Material) से इंद्रियां सक्रिय होती हैं और ज्ञान स्थायी होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"'करके सीखना (Learning by doing)' पर किसने जोर दिया था?", o:["जॉन डीवी","पावलोव","स्किनर","थार्नडाइक"], a:0, e:"जॉन डीवी एक प्रयोजनवादी (Pragmatist) थे जिन्होंने अनुभव द्वारा सीखने पर जोर दिया।"},
-            {s:"शिक्षण अभिरुचि", q:"प्राथमिक स्तर पर शिक्षण की सबसे अच्छी विधि है:", o:["व्याख्यान विधि","खेल-खेल विधि (Play-way method)","प्रोजेक्ट विधि","प्रदर्शन विधि"], a:1, e:"छोटे बच्चे स्वभाव से चंचल होते हैं, अतः खेल के माध्यम से सिखाना सबसे रुचिकर होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"सतत और व्यापक मूल्यांकन (CCE) का उद्देश्य है:", o:["शैक्षणिक बोझ बढ़ाना","समग्र विकास (Holistic development)","सभी छात्रों को पास करना","केवल बार-बार परीक्षण करना"], a:1, e:"CCE का उद्देश्य बच्चे के शैक्षिक और सह-शैक्षिक (खेल, कला आदि) दोनों पक्षों का विकास करना है।"},
-            {s:"शिक्षण अभिरुचि", q:"एक रचनात्मक बच्चा (Creative child) आम तौर पर होता है:", o:["बहुत शांत","जिज्ञासु और मौलिक","रटने में अच्छा","आज्ञाकारी"], a:1, e:"सृजनात्मक बच्चे सवाल पूछते हैं (जिज्ञासु) और समस्याओं के नए (मौलिक) हल खोजते हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"यदि कोई छात्र कक्षा में दुर्व्यवहार करता है, तो सबसे अच्छा तरीका है:", o:["उसे बाहर निकाल दें","कारण खोजें और काउंसलिंग करें","उसे पीटें","अंक काट लें"], a:1, e:"एक शिक्षक को हमेशा मनोवैज्ञानिक दृष्टिकोण से समस्या के मूल कारण (Root cause) को जानना चाहिए।"},
-            {s:"शिक्षण अभिरुचि", q:"छात्रों में नेतृत्व के गुण (Leadership qualities) कौन विकसित करता है?", o:["सह-पाठ्यचर्या संबंधी गतिविधियाँ","किताबें पढ़ना","सख्त अनुशासन","उच्च अंक"], a:0, e:"खेल, स्काउट, NCC, वाद-विवाद आदि से छात्रों में नेतृत्व और टीम-भावना आती है।"},
-            {s:"शिक्षण अभिरुचि", q:"छात्रों के प्रति एक शिक्षक का व्यवहार कैसा होना चाहिए?", o:["निरंकुश","लोकतांत्रिक और स्नेही","उदासीन","आक्रामक"], a:1, e:"लोकतांत्रिक वातावरण में छात्र बिना डरे अपनी बात रख सकते हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"किस उम्र को 'गैंग एज' (गिरोह की अवस्था) कहा जाता है?", o:["शैशवावस्था","प्रारंभिक बाल्यावस्था","उत्तर बाल्यावस्था (Later Childhood)","किशोरावस्था"], a:2, e:"उत्तर बाल्यावस्था (7-12 वर्ष) में बच्चे समूह (Gang) में रहना और खेलना पसंद करते हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"शिक्षा का मुख्य उद्देश्य है:", o:["नौकरी पाना","सर्वांगीण विकास (All-round dev)","उच्च अंक प्राप्त करना","परीक्षा पास करना"], a:1, e:"शिक्षा का अर्थ शारीरिक, मानसिक, सामाजिक और आध्यात्मिक शक्तियों का विकास है।"},
-            {s:"शिक्षण अभिरुचि", q:"समावेशी शिक्षा (Inclusive Education) का अर्थ है:", o:["अमीरों के लिए शिक्षा","सभी बच्चों को एक साथ शिक्षित करना","लड़कियों के लिए शिक्षा","विशेष स्कूल"], a:1, e:"सामान्य और विशेष आवश्यकता (विकलांग) वाले बच्चों को एक ही कक्षा में पढ़ाना।"},
-            {s:"शिक्षण अभिरुचि", q:"शिक्षा में मूल्यांकन (Evaluation) है:", o:["केवल परीक्षा","एक सतत प्रक्रिया (Continuous process)","वर्ष के अंत की गतिविधि","इनमें से कोई नहीं"], a:1, e:"मूल्यांकन केवल परीक्षा नहीं है, यह बच्चे की प्रगति जानने की निरंतर चलने वाली प्रक्रिया है।"},
-            {s:"शिक्षण अभिरुचि", q:"प्रतिभाशाली छात्रों (Gifted students) को आवश्यकता होती है:", o:["आसान पाठ्यक्रम की","चुनौतीपूर्ण कार्यों की","कम ध्यान की","बार-बार अभ्यास की"], a:1, e:"प्रतिभाशाली बच्चों का मानसिक स्तर ऊँचा होता है, इसलिए उन्हें Enrichment Programs (कठिन कार्य) चाहिए।"},
-            {s:"शिक्षण अभिरुचि", q:"सूक्ष्म-शिक्षण (Micro-teaching) तकनीक का उपयोग किसके लिए किया जाता है?", o:["छोटे बच्चों को पढ़ाने के लिए","शिक्षक प्रशिक्षण (Teacher training) के लिए","माइक्रोस्कोप का उपयोग करके पढ़ाने के लिए","धीमी गति से सीखने वालों के लिए"], a:1, e:"यह भावी शिक्षकों (B.Ed/BSTC छात्रों) में शिक्षण कौशल विकसित करने की तकनीक है।"},
-            {s:"शिक्षण अभिरुचि", q:"एक अच्छे परीक्षण में क्या होना चाहिए?", o:["वैधता (Validity)","विश्वसनीयता (Reliability)","वस्तुनिष्ठता (Objectivity)","उपरोक्त सभी"], a:3, e:"ये सभी एक अच्छे मूल्यांकन टूल (Test) की आवश्यक विशेषताएं हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"यदि कक्षा में शिक्षक से कोई गलती हो जाती है, तो उसे चाहिए:", o:["उसे छिपाएं","इसे स्वीकार करें और सुधारें","छात्रों को दोष दें","इसे अनदेखा करें"], a:1, e:"शिक्षक भी इंसान है, गलती मानना और सुधारना एक आदर्श शिक्षक की पहचान है।"},
-            {s:"शिक्षण अभिरुचि", q:"सह-शिक्षा (Co-education) फायदेमंद है क्योंकि यह:", o:["लागत कम करती है","लैंगिक समानता (Gender equality) को बढ़ावा देती है","एक आधुनिक चलन है","अनुशासन आसान बनाती है"], a:1, e:"लड़के-लड़कियों के साथ पढ़ने से झिझक दूर होती है और स्वस्थ दृष्टिकोण विकसित होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"'डिस्लेक्सिया' (Dyslexia) किससे संबंधित है?", o:["पढ़ने में कठिनाई","लिखने में कठिनाई","गणित में कठिनाई","बोलने में कठिनाई"], a:0, e:"यह एक पठन अक्षमता (Reading disability) है (जैसे 'saw' को 'was' पढ़ना)।"},
-            {s:"शिक्षण अभिरुचि", q:"श्यामपट्ट (Black-board) का सबसे उपयुक्त उपयोग है:", o:["सुंदर नोट्स लिखना","मुख्य बिंदुओं को उजागर करना","चित्र बनाना","छात्रों को व्यस्त रखना"], a:1, e:"बोर्ड का उपयोग पूरे पाठ को छापने के लिए नहीं, बल्कि महत्वपूर्ण कॉन्सेप्ट्स लिखने के लिए होना चाहिए।"},
-            {s:"शिक्षण अभिरुचि", q:"राष्ट्रीय शिक्षक दिवस कब मनाया जाता है?", o:["5 सितंबर","14 नवंबर","5 अक्टूबर","2 अक्टूबर"], a:0, e:"डॉ. सर्वपल्ली राधाकृष्णन के जन्म दिवस पर 5 सितंबर को (विश्व शिक्षक दिवस 5 अक्टूबर को)।"},
-            {s:"शिक्षण अभिरुचि", q:"अभिभावक-शिक्षक संघ (PTA) का मुख्य उद्देश्य है:", o:["धन एकत्र करना","सहयोगात्मक बाल विकास","छात्रों की शिकायत करना","सामाजिकरण"], a:1, e:"शिक्षक और माता-पिता मिलकर ही बच्चे की कमियों को दूर कर उसका विकास कर सकते हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"जब एक छात्र विफल होता है, तो इसे आमतौर पर किसकी विफलता माना जाता है?", o:["छात्र की","व्यवस्था/शिक्षक की","माता-पिता की","पाठ्यपुस्तक की"], a:1, e:"आधुनिक शिक्षा मनोविज्ञान मानता है कि यदि बच्चा फेल होता है, तो सिस्टम (शिक्षण विधि) फेल हुआ है।"},
-            {s:"शिक्षण अभिरुचि", q:"'प्रयत्न और भूल' (Trial and Error) का मनोवैज्ञानिक सिद्धांत किसने दिया?", o:["थार्नडाइक","पावलोव","स्किनर","पियाजे"], a:0, e:"थार्नडाइक ने बिल्ली पर प्रयोग कर यह सिद्धांत दिया (गलतियां करके सीखना)।"},
-            {s:"शिक्षण अभिरुचि", q:"पाठ्येतर गतिविधियां (Extracurricular activities) आयोजित की जानी चाहिए:", o:["कभी-कभी","पाठ्यक्रम के एक अभिन्न अंग के रूप में","केवल खेलों के लिए","समय बिताने के लिए"], a:1, e:"ये गतिविधियां पढ़ाई से अलग नहीं हैं, बल्कि ये शिक्षा का ही हिस्सा (Co-curricular) हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"कक्षा संचार (Classroom communication) में प्रमुख तत्व है:", o:["सहानुभूति (Empathy)","तेज आवाज","श्रुतिलेख (Dictation)","डर"], a:0, e:"जब शिक्षक छात्रों की भावनाओं (Empathy) को समझकर बात करता है, तो संचार प्रभावी होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"इनमें से कौन सी एक शिक्षक-केंद्रित विधि है?", o:["ह्यूरिस्टिक विधि","प्रोजेक्ट विधि","व्याख्यान विधि (Lecture method)","चर्चा विधि"], a:2, e:"व्याख्यान विधि में शिक्षक सक्रिय रहता है और छात्र निष्क्रिय श्रोता होते हैं।"},
-            {s:"शिक्षण अभिरुचि", q:"कौन सा गुण एक शिक्षक को छात्रों के बीच लोकप्रिय बनाता है?", o:["सख्त अनुशासन","उच्च अंक देना","निष्पक्ष और मददगार स्वभाव","गलतियों को अनदेखा करना"], a:2, e:"छात्र हमेशा उस शिक्षक का सम्मान करते हैं जो बिना भेदभाव के उनकी मदद करता है।"},
-            {s:"शिक्षण अभिरुचि", q:"शिक्षा का अधिकार (RTE) अधिनियम किस उम्र के बच्चों को मुफ्त शिक्षा की गारंटी देता है?", o:["6-14 वर्ष","3-18 वर्ष","5-10 वर्ष","4-15 वर्ष"], a:0, e:"अनुच्छेद 21A के तहत 6 से 14 वर्ष के बच्चों के लिए शिक्षा मौलिक अधिकार है।"},
-            {s:"शिक्षण अभिरुचि", q:"एक सफल शिक्षक को ज्ञान होना चाहिए:", o:["विषय का","बाल मनोविज्ञान का","शिक्षाशास्त्र का","उपरोक्त सभी का"], a:3, e:"कंटेंट नॉलेज के साथ-साथ यह जानना भी जरूरी है कि 'बच्चा कैसे सीखता है' (मनोविज्ञान)।"},
-            {s:"शिक्षण अभिरुचि", q:"रचनात्मक मूल्यांकन (Formative assessment) किया जाता है:", o:["वर्ष के अंत में","सीखने की प्रक्रिया के दौरान","केवल रैंकिंग के लिए","कभी नहीं"], a:1, e:"यह शिक्षण के दौरान (During teaching) फीडबैक और सुधार के लिए किया जाता है।"},
-            {s:"शिक्षण अभिरुचि", q:"नैतिक मूल्यों को स्थापित करने का सबसे अच्छा तरीका है:", o:["मूल्यों पर व्याख्यान देना","गलत काम के लिए दंडित करना","शिक्षक का आदर्श प्रस्तुत करना (Role model)","कहानियाँ पढ़ना"], a:2, e:"बच्चे अनुकरण (नकल) करते हैं। यदि शिक्षक नैतिक होगा, तो बच्चे भी होंगे।"},
-            {s:"शिक्षण अभिरुचि", q:"स्कूल छोड़ने की दर (Drop-out rate) को कम किया जा सकता है:", o:["पाठ्यक्रम को रोचक बनाकर","अधिक होमवर्क देकर","सख्त उपस्थिति से","जुर्माना लगाकर"], a:0, e:"जब पढ़ाई बोझ की जगह आनंददायक होगी, तो बच्चे स्कूल छोड़ना बंद कर देंगे।"},
-            {s:"शिक्षण अभिरुचि", q:"'टैबुला रासा' (कोरी स्लेट) की अवधारणा किसने दी थी?", o:["जॉन लॉक","रूसो","प्लेटो","अरस्तू"], a:0, e:"जॉन लॉक ने कहा था कि बच्चे का मस्तिष्क जन्म के समय एक कोरी स्लेट के समान होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"कक्षा में प्रभावी अनुशासन का अर्थ है:", o:["पूर्ण सन्नाटा","छात्रों द्वारा आत्म-अनुशासन (Self-discipline)","पूर्ण आज्ञाकारिता","शिक्षक का डर"], a:1, e:"सच्चा अनुशासन डंडे का डर नहीं, बल्कि भीतर से आया स्व-नियंत्रण होता है।"},
-            {s:"शिक्षण अभिरुचि", q:"पाठ योजना (Lesson planning) शिक्षक की मदद करती है:", o:["कोर्स जल्दी खत्म करने में","व्यवस्थित रूप से पढ़ाने में","समय बर्बाद करने में","कक्षा में आराम करने में"], a:1, e:"Lesson plan शिक्षक को उद्देश्यपूर्ण और क्रमबद्ध (Systematic) तरीके से पढ़ाने का ढांचा देता है।"},
-            {s:"शिक्षण अभिरुचि", q:"जो छात्र नियमित रूप से स्कूल देर से आता है उसे:", o:["पीटा जाना चाहिए","घर वापस भेज दिया जाना चाहिए","कारण पूछा जाना चाहिए","बाहर खड़ा किया जाना चाहिए"], a:2, e:"देर से आने के मनोवैज्ञानिक या पारिवारिक कारण हो सकते हैं, उन्हें जानना जरूरी है।"},
-            {s:"शिक्षण अभिरुचि", q:"संज्ञानात्मक डोमेन (Cognitive domain) का उच्चतम स्तर कौन सा है?", o:["ज्ञान","समझ","विश्लेषण","मूल्यांकन (Evaluation)"], a:3, e:"ब्लूम की टैक्सोनॉमी के अनुसार: ज्ञान, समझ, अनुप्रयोग, विश्लेषण, संश्लेषण, मूल्यांकन।"},
-            {s:"शिक्षण अभिरुचि", q:"विशेष शिक्षा (Special education) किसके लिए होती है:", o:["प्रतिभाशाली छात्रों के लिए","दिव्यांग (Differently-abled) छात्रों के लिए","गरीब छात्रों के लिए","अमीर छात्रों के लिए"], a:1, e:"शारीरिक या मानसिक रूप से विकलांग बच्चों की विशेष जरूरतों को पूरा करने के लिए।"},
-            {s:"शिक्षण अभिरुचि", q:"पियाजे के अनुसार, पूर्व-संक्रियात्मक अवस्था (pre-operational stage) के बच्चों में किस चीज़ की कमी होती है?", o:["अहंकेंद्रितता (Ego-centrism)","संरक्षण (Conservation)","जीववाद (Animism)","भाषा"], a:1, e:"2-7 वर्ष के बच्चे यह नहीं समझ पाते कि आकार बदलने से मात्रा नहीं बदलती (इसे संरक्षण की कमी कहते हैं)।"},
-
-            {s:"English", q:"Choose the correct article: She is ____ honest girl.", o:["a","an","the","no article"], a:1, e:"'Honest' starts with a vowel sound (ऑनेस्ट), so 'an' is used."},
+            {s:"शिक्षण अभिरुचि", q:"एक अच्छा कक्षा का वातावरण वह है जहाँ:", o:["पूरी तरह सन्नाटा रहता है","छात्र डरे रहते हैं","सक्रिय बातचीत (Interaction) होती है","शिक्षक नोट्स लिखवाता है"], a:2, e:"प्रभावी कक्षा वह है जहाँ द्वि-मार्गीय (Two-way) संवाद होता है।"},
+            
+            {s:"English", q:"Choose the correct article: She is ____ honest girl.", o:["a","an","the","no article"], a:1, e:"'Honest' starts with a vowel sound, so 'an' is used."},
             {s:"English", q:"Synonym of 'ABANDON':", o:["Keep","Retain","Forsake","Maintain"], a:2, e:"Abandon means to leave completely. Forsake is its exact synonym."},
-            {s:"English", q:"Antonym of 'OPTIMIST':", o:["Pessimist","Hopeful","Realistic","Cheerful"], a:0, e:"Optimist looks at the bright side (आशावादी), Pessimist looks at the dark side (निराशावादी)."},
+            {s:"English", q:"Antonym of 'OPTIMIST':", o:["Pessimist","Hopeful","Realistic","Cheerful"], a:0, e:"Optimist looks at the bright side, Pessimist looks at the dark side."},
             {s:"English", q:"Find the correctly spelt word:", o:["Grammer","Grammar","Gremmar","Gramar"], a:1, e:"The correct spelling ends with '-mar' -> G-R-A-M-M-A-R."},
             {s:"English", q:"Choose the correct preposition: He died ____ cholera.", o:["from","by","of","with"], a:2, e:"To die 'of' a disease is the correct fixed preposition."},
-            {s:"English", q:"Fill in the blank: Neither Ram nor Shyam ____ present.", o:["are","is","were","have"], a:1, e:"When two singular subjects are joined by 'Neither...nor', the verb is singular."},
-            {s:"English", q:"Change into passive voice: 'He writes a letter.'", o:["A letter is wrote by him.","A letter is written by him.","A letter was written by him.","A letter has written by him."], a:1, e:"Simple present active changes to 'is/are/am + V3' in passive."},
-            {s:"English", q:"Identify the tense: 'I have been waiting for two hours.'", o:["Present Perfect Continuous","Present Perfect","Past Continuous","Present Continuous"], a:0, e:"'have/has + been + V1+ing' represents Present Perfect Continuous."},
-            {s:"English", q:"What is the plural of 'Child'?", o:["Childs","Childrens","Children","Childes"], a:2, e:"Child is an irregular noun. Its plural is Children (no 's' at the end)."},
-            {s:"English", q:"Choose the correct synonym of 'DILIGENT':", o:["Lazy","Hardworking","Foolish","Careful"], a:1, e:"Diligent means showing care and effort in duties (मेहनती)."},
-            {s:"English", q:"Meaning of the idiom 'A bed of roses':", o:["Hard situation","Comfortable situation","A garden","Painful state"], a:1, e:"It means a very easy or pleasant situation."},
-            {s:"English", q:"He is blind ____ one eye.", o:["in","of","to","with"], a:0, e:"'Blind in' is used for physical blindness of an eye. ('Blind to' means ignoring faults)."},
-            {s:"English", q:"Select the correct sentence:", o:["I prefers coffee than tea.","I prefer coffee to tea.","I prefer coffee from tea.","I preferring coffee than tea."], a:1, e:"The verb 'prefer' is followed by 'to', not 'than'."},
-            {s:"English", q:"Antonym of 'ANCIENT':", o:["Old","Historical","Modern","Antique"], a:2, e:"Ancient means very old (प्राचीन). Antonym is Modern (आधुनिक)."},
-            {s:"English", q:"The feminine gender of 'Horse' is:", o:["Mare","Vixen","Doe","Ewe"], a:0, e:"Male is Horse (Stallion), female is Mare (घوड़ी)."},
-            {s:"English", q:"A person who does not believe in God is a/an:", o:["Theist","Atheist","Agnostic","Fanatic"], a:1, e:"Atheist (नास्तिक) does not believe in God. Theist believes in God."},
-            {s:"English", q:"Fill the blank: 'If I _____ a bird, I would fly.'", o:["am","was","were","had been"], a:2, e:"In unreal/imaginary conditional sentences, 'were' is used with all subjects."},
-            {s:"English", q:"Find the error part in the sentence: (A) One of my friend / (B) has gone / (C) to America / (D) No error.", o:["(A)","(B)","(C)","(D)"], a:0, e:"It should be 'One of my friends' (plural noun after 'one of')."},
-            {s:"English", q:"Identify the adjective: 'She has a beautiful house.'", o:["She","has","beautiful","house"], a:2, e:"'Beautiful' describes the noun 'house', so it is an adjective."},
-            {s:"English", q:"Choose the correct spelling:", o:["Accomodation","Accommodation","Acomodation","Acommodation"], a:1, e:"Double 'c' and double 'm' -> A-C-C-O-M-M-O-D-A-T-I-O-N."},
 
             {s:"Hindi", q:"'विद्यालय' शब्द में कौनसी संधि है?", o:["गुण संधि","दीर्घ संधि","यण संधि","वृद्धि संधि"], a:1, e:"विद्या + आलय = विद्यालय (आ + आ = आ), यह दीर्घ स्वर संधि है।"},
             {s:"Hindi", q:"'नीलकंठ' में कौन-सा समास है?", o:["द्वन्द्व समास","कर्मधारय","बहुव्रीहि","तत्पुरुष"], a:2, e:"नीला है कंठ जिसका अर्थात् 'शिव' (तीसरा अर्थ प्रधान है, अतः बहुव्रीहि)।"},
             {s:"Hindi", q:"'आँख का तारा' मुहावरे का अर्थ है:", o:["बहुत प्रिय होना","दुश्मन होना","आँख में दर्द होना","अंधा होना"], a:0, e:"बहुत ही दुलारा या प्यारा होना।"},
             {s:"Hindi", q:"'कमल' का पर्यायवाची शब्द नहीं है:", o:["जलज","पंकज","नीरज","वारिद"], a:3, e:"'वारिद' बादल का पर्यायवाची है (वारि=जल, द=देने वाला)।"},
-            {s:"Hindi", q:"'सज्जन' का संधि विच्छेद क्या होगा?", o:["सज्ज + न","सत् + जन","सद् + जन","सम + जन"], a:1, e:"सत् + जन = सज्जन (व्यंजन संधि, त् का ज् बन जाता है)।"},
-            {s:"Hindi", q:"'आदर' का विलोम शब्द है:", o:["निरादर","सम्मान","सत्कार","अनादर"], a:0, e:"आदर का सही विलोम 'निरादर' होता है।"},
-            {s:"Hindi", q:"'अनुपस्थित' में कौन-सा उपसर्ग है?", o:["अन्","अनु","अ","अन"], a:0, e:"अन् (हलंत) + उपस्थित = अनुपस्थित।"},
-            {s:"Hindi", q:"'मिठास' में कौन-सा प्रत्यय है?", o:["आस","ठास","स","मीठा"], a:0, e:"मीठा (मूल शब्द) + आस (प्रत्यय) = मिठास (भाववाचक संज्ञा)।"},
-            {s:"Hindi", q:"जो सब कुछ जानता हो, उसे कहते हैं:", o:["अज्ञ","सर्वज्ञ","विशेषज्ञ","कृतज्ञ"], a:1, e:"सर्व (सब) + ज्ञ (जानने वाला)।"},
-            {s:"Hindi", q:"इनमें से शुद्ध वर्तनी वाला शब्द है:", o:["उज्जवल","उज्वल","उज्ज्वल","उजवल"], a:2, e:"उत् + ज्वल = उज्ज्वल (इसमें दो आधे 'ज्' होते हैं)।"},
-            {s:"Hindi", q:"'दिन-रात' में समास है:", o:["अव्ययीभाव","कर्मधारय","द्वन्द्व","द्विगु"], a:2, e:"दिन और रात (दोनों पद प्रधान हैं और बीच में योजक चिह्न है)।"},
-            {s:"Hindi", q:"'नौ दो ग्यारह होना' का अर्थ है:", o:["भाग जाना","गणित सीखना","ग्यारह बजना","छुप जाना"], a:0, e:"यह एक प्रसिद्ध मुहावरा है जिसका अर्थ चंपत होना या भाग जाना है।"},
-            {s:"Hindi", q:"'सूर्य' का पर्यायवाची है:", o:["दिनकर","मयंक","सुधाकर","राकेश"], a:0, e:"दिनकर, दिवाकर, भानु, भास्कर सूर्य के पर्यायवाची हैं (अन्य चंद्रमा के हैं)।"},
-            {s:"Hindi", q:"'पावक' का संधि विच्छेद है:", o:["पा + वक","पौ + अक","पो + अक","पाव + क"], a:1, e:"अयादि संधि: औ + अ = आव। पौ + अक = पावक।"},
-            {s:"Hindi", q:"'कठोर' का विलोम है:", o:["कड़ा","मृदु / कोमल","सरल","सहृदय"], a:1, e:"कठोर (Hard) का विपरीत मृदु या कोमल (Soft) होता है।"},
-            {s:"Hindi", q:"जहाँ जाया न जा सके:", o:["सुगम","अगम्य","दुर्गम","निर्गम"], a:1, e:"अ (नहीं) + गम्य (जाने योग्य)।"},
-            {s:"Hindi", q:"'चौराहा' में कौन-सा समास है?", o:["द्विगु","द्वन्द्व","तत्पुरुष","बहुव्रीहि"], a:0, e:"चार राहों का समूह (पहला पद संख्यावाचक है, अतः द्विगु)।"},
-            {s:"Hindi", q:"'स्वागत' का संधि विच्छेद:", o:["स्व + आगत","सु + आगत","स्वा + गत","स्व: + आगत"], a:1, e:"यण संधि: सु + आगत = स्वागत (उ + आ = वा)।"},
-            {s:"Hindi", q:"किस शब्द में 'आ' उपसर्ग नहीं है?", o:["आजन्म","आगमन","आकर्षक","आदरणीय"], a:3, e:"'आदरणीय' में आदर मूल शब्द है और 'अनीय' प्रत्यय है। इसमें 'आ' उपसर्ग नहीं है।"},
-            {s:"Hindi", q:"शुद्ध वाक्य चुनिए:", o:["राम ने रोटी खाया","राम ने रोटी खाई","राम रोटी खाया","राम से रोटी खाया"], a:1, e:"'ने' परसर्ग के साथ क्रिया कर्म (रोटी-स्त्रीलिंग) के अनुसार होती है, अतः 'खाई' सही है।"},
-            {s:"Hindi", q:"'अंधे की लाठी' का अर्थ:", o:["एकमात्र सहारा","अंधा होना","लकड़ी","बेसहारा"], a:0, e:"जैसे- श्रवण कुमार अपने माता-पिता के लिए अंधे की लाठी था।"},
-            {s:"Hindi", q:"'उपकार' को मानने वाला:", o:["कृतघ्न","कृतज्ञ","परोपकारी","दयालु"], a:1, e:"किए गए उपकार को मानने वाला 'कृतज्ञ' कहलाता है (न मानने वाला कृतघ्न)।"},
-            {s:"Hindi", q:"'हाथ मलना' मुहावरे का अर्थ:", o:["सर्दी लगना","पछताना","हाथ साफ करना","स्वागत करना"], a:1, e:"अवसर निकल जाने पर व्यक्ति हाथ मलता रह जाता है (पछताता है)।"},
-            {s:"Hindi", q:"'अग्नि' का पर्यायवाची नहीं है:", o:["पावक","अनल","कृशानु","अनिल"], a:3, e:"'अनिल' हवा (Wind) का पर्यायवाची है, अग्नि का नहीं।"},
-            {s:"Hindi", q:"'आविर्भाव' का विलोम शब्द:", o:["प्रादुर्भाव","तिरोभाव","उद्भव","विकास"], a:1, e:"आविर्भाव (प्रकट होना) का सटीक विलोम तिरोभाव (लोप होना) है।"},
-            {s:"Hindi", q:"'निश्चय' में कौनसी संधि है?", o:["स्वर","व्यंजन","विसर्ग","यण"], a:2, e:"निः + चय = निश्चय (विसर्ग संधि)।"},
-            {s:"Hindi", q:"'अत्याचार' में उपसर्ग है:", o:["अ","अति","अत्य","आ"], a:1, e:"अति + आचार = अत्याचार (यण संधि से)।"},
-            {s:"Hindi", q:"'पंकज' शब्द कैसा है?", o:["रूढ़","यौगिक","योगरूढ़","विदेशी"], a:2, e:"पंक (कीचड़) + ज (जन्मने वाला) अर्थात् कमल। यह विशेष अर्थ देता है इसलिए योगरूढ़ है।"},
-            {s:"Hindi", q:"'घबराहट' में प्रत्यय है:", o:["आहट","हट","ट","राहट"], a:0, e:"घबराना (क्रिया) + आहट (प्रत्यय) = घबराहट।"},
-            {s:"Hindi", q:"'यथाशक्ति' में समास है:", o:["तत्पुरुष","अव्ययीभाव","द्विगु","कर्मधारय"], a:1, e:"शक्ति के अनुसार (पहला पद 'यथा' अव्यय है, अतः अव्ययीभाव)।"}
+            {s:"Hindi", q:"'सज्जन' का संधि विच्छेद क्या होगा?", o:["सज्ज + न","सत् + जन","सद् + जन","सम + जन"], a:1, e:"सत् + जन = सज्जन (व्यंजन संधि, त् का ज् बन जाता है)।"}
         ];
 
         const TOTAL_QUESTIONS = quizData.length;
@@ -451,12 +279,14 @@
         let timeRemaining = 180 * 60; // 180 minutes in seconds
         let timerInterval;
 
+        // Initialize App
         function initApp() {
             document.getElementById('display-total-q').innerText = TOTAL_QUESTIONS;
-            document.getElementById('display-total-m').innerText = TOTAL_QUESTIONS * 3;
-            renderPalette();
+            document.getElementById('display-total-m').innerText = TOTAL_QUESTIONS * 3; // 3 marks per Question
+            document.getElementById('score-total-display').innerText = ` / ${TOTAL_QUESTIONS * 3}`;
         }
 
+        // Start Test
         function startTest() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
@@ -467,6 +297,7 @@
             startTimer();
         }
 
+        // Timer Logic
         function startTimer() {
             const timerDisplay = document.getElementById('timer');
             timerInterval = setInterval(() => {
@@ -491,24 +322,24 @@
             }, 1000);
         }
 
+        // Load Question View
         function loadQuestion() {
             const data = quizData[currentQuestionIndex];
             document.getElementById('current-q-num').innerText = `${currentQuestionIndex + 1}.`;
             document.getElementById('section-badge').innerText = data.s;
             
-            // Allow basic math markdown parsing (like x^2 to x²)
             let qText = data.q.replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\*/g, '×');
             document.getElementById('question-text').innerHTML = qText;
             
-            // Progress
+            // Progress Bar Width
             const progress = ((currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
 
-            // Options
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             const labels = ['A', 'B', 'C', 'D'];
 
+            // Render Options
             data.o.forEach((opt, index) => {
                 const isSelected = userAnswers[currentQuestionIndex] === index;
                 const btn = document.createElement('button');
@@ -526,9 +357,9 @@
             });
 
             updateNavigation();
-            updatePaletteUI();
         }
 
+        // Question Navigation Actions
         function selectOption(index) {
             userAnswers[currentQuestionIndex] = index;
             loadQuestion(); // reload to reflect styles
@@ -564,59 +395,7 @@
             }
         }
 
-        function renderPalette() {
-            const grid = document.getElementById('palette-grid');
-            grid.innerHTML = '';
-            for(let i=0; i<TOTAL_QUESTIONS; i++){
-                const btn = document.createElement('button');
-                btn.innerText = i + 1;
-                btn.id = `pal-btn-${i}`;
-                btn.className = `palette-btn`;
-                btn.onclick = () => {
-                    currentQuestionIndex = i;
-                    loadQuestion();
-                    if(window.innerWidth < 768) togglePalette();
-                };
-                grid.appendChild(btn);
-            }
-        }
-
-        function updatePaletteUI() {
-            let ansCount = 0;
-            for(let i=0; i<TOTAL_QUESTIONS; i++){
-                const btn = document.getElementById(`pal-btn-${i}`);
-                if(!btn) continue;
-                
-                // Reset classes
-                btn.className = 'palette-btn';
-                
-                // Add states
-                if(userAnswers[i] !== null) {
-                    btn.classList.add('answered');
-                    ansCount++;
-                }
-                if(i === currentQuestionIndex) {
-                    btn.classList.add('active');
-                }
-            }
-            document.getElementById('count-ans').innerText = ansCount;
-            document.getElementById('count-unans').innerText = TOTAL_QUESTIONS - ansCount;
-        }
-
-        function togglePalette() {
-            const drawer = document.getElementById('palette-drawer');
-            const overlay = document.getElementById('palette-overlay');
-            if(drawer.classList.contains('drawer-closed')) {
-                drawer.classList.remove('drawer-closed');
-                drawer.classList.add('drawer-open');
-                overlay.classList.remove('hidden');
-            } else {
-                drawer.classList.add('drawer-closed');
-                drawer.classList.remove('drawer-open');
-                overlay.classList.add('hidden');
-            }
-        }
-
+        // Submission Controls
         function showSubmitModal() {
             const unattempted = userAnswers.filter(ans => ans === null).length;
             const warningText = document.getElementById('modal-warning');
@@ -642,6 +421,7 @@
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 200);
         }
 
+        // Evaluation & Review
         function finishTest() {
             clearInterval(timerInterval);
             closeModal();
@@ -682,9 +462,9 @@
                 const isCorrect = uAns === cAns;
 
                 let badgeHtml = isSkipped 
-                    ? '<span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-xs font-bold border border-gray-200">छोड़ दिया</span>'
-                    : (isCorrect ? '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-xs font-bold border border-green-200">सही उत्तर</span>' 
-                                 : '<span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-bold border border-red-200">गलत उत्तर</span>');
+                    ? '<span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-md text-[10px] md:text-xs font-bold border border-gray-200 whitespace-nowrap">छोड़ दिया</span>'
+                    : (isCorrect ? '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[10px] md:text-xs font-bold border border-green-200 whitespace-nowrap">सही उत्तर</span>' 
+                                 : '<span class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[10px] md:text-xs font-bold border border-red-200 whitespace-nowrap">गलत उत्तर</span>');
 
                 let optionsHtml = '';
                 data.o.forEach((opt, optIdx) => {
@@ -693,37 +473,37 @@
                     
                     if (optIdx === cAns) {
                         styleClass = "border-green-500 bg-green-50 text-green-900 ring-1 ring-green-500";
-                        icon = `<svg class="w-5 h-5 text-green-600 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`;
+                        icon = `<svg class="w-5 h-5 text-green-600 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`;
                     } else if (optIdx === uAns && !isCorrect) {
                         styleClass = "border-red-400 bg-red-50 text-red-900";
-                        icon = `<svg class="w-5 h-5 text-red-500 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                        icon = `<svg class="w-5 h-5 text-red-500 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>`;
                     }
 
                     optionsHtml += `
-                        <div class="p-3 rounded-xl border-2 ${styleClass} flex items-center mb-2 transition-all">
+                        <div class="p-3 rounded-xl border-2 ${styleClass} flex items-center mb-2 transition-all text-sm md:text-base">
                             <span class="font-bold mr-3 w-6 text-center">${labels[optIdx]}.</span>
-                            <span class="flex-grow font-medium">${opt.replace(/\^2/g, '²').replace(/\^3/g, '³')}</span>
+                            <span class="font-medium pr-2">${opt.replace(/\^2/g, '²').replace(/\^3/g, '³')}</span>
                             ${icon}
                         </div>`;
                 });
 
                 const qDiv = document.createElement('div');
-                qDiv.className = "bg-white p-5 md:p-6 rounded-2xl border border-gray-200 shadow-sm";
+                qDiv.className = "bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-sm";
                 qDiv.innerHTML = `
                     <div class="flex justify-between items-start mb-4">
-                        <span class="font-black text-gray-400 text-lg w-10">Q${qIdx + 1}.</span>
+                        <span class="font-black text-gray-400 text-base md:text-lg w-10">Q${qIdx + 1}.</span>
                         ${badgeHtml}
                     </div>
-                    <p class="text-gray-900 font-bold mb-5 leading-relaxed text-lg pl-10 -mt-10">${data.q.replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\*/g, '×')}</p>
-                    <div class="mb-5 pl-10">
+                    <p class="text-gray-900 font-bold mb-5 leading-relaxed text-base md:text-lg pl-8 md:pl-10 -mt-10">${data.q.replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\*/g, '×')}</p>
+                    <div class="mb-5 pl-8 md:pl-10">
                         ${optionsHtml}
                     </div>
-                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 ml-10">
+                    <div class="bg-blue-50/50 p-3 md:p-4 rounded-xl border border-blue-100 ml-8 md:ml-10">
                         <div class="flex items-center gap-2 mb-1">
                             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span class="font-bold text-blue-800 text-sm">व्याख्या:</span> 
+                            <span class="font-bold text-blue-800 text-xs md:text-sm">व्याख्या:</span> 
                         </div>
-                        <span class="text-blue-900 text-sm font-medium leading-relaxed block mt-2">${data.e}</span>
+                        <span class="text-blue-900 text-xs md:text-sm font-medium leading-relaxed block mt-2">${data.e}</span>
                     </div>
                 `;
                 reviewContainer.appendChild(qDiv);
@@ -734,7 +514,7 @@
             window.scrollTo(0, 0);
         }
 
-        // Initialize on load
+        // Initialize script logic on window load
         window.onload = initApp;
 
     </script>
